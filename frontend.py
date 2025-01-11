@@ -1,5 +1,5 @@
 import streamlit as st
-
+import datetime
 
 
 conn = st.connection("neon", type="sql")
@@ -25,6 +25,14 @@ Bloomberg Opinion have looked at proxies such as the withdrawal of money from th
 
 """)
 
+start_date = st.sidebar.date_input('start date', datetime.date(2020,1,24))
+end_date = st.sidebar.date_input('end date', datetime.date(2025,1,11))
+if start_date < end_date:
+    st.success('Looking at the period between `%s` and `%s`.' % (start_date, end_date))
+else:
+    st.error('Error: End date must fall after start date.')
+df = df[(df.date > start_date) & (df.date < end_date)]
+
 st.write("""## Most frequently used control points
 There are 15 control points in Hong Kong. 
 """)
@@ -37,5 +45,12 @@ st.bar_chart(df_identity, stack=False)
 st.write("""## Time series
 """)
 df['flux'] = df.arrivals-df.departures
-st.bar_chart(df,x='date',y='flux', stack=False)
+# df_aggregate_numbers = df.groupby(['date']).sum()[['arrivals','departures','flux']]
+# st.line_chart(df_aggregate_numbers, y=['arrivals', 'departures'])
 
+for i in ['Hong Kong Residents', 'Mainland Visitors', 'Other Visitors']:
+    st.write('### '+i)
+    df_aggregate_numbers = df[df.identity == i].groupby(['date']).sum()[['arrivals','departures','flux']]
+    st.line_chart(df_aggregate_numbers, y=['arrivals', 'departures'])
+
+st.write('Interestingly, you can spot when the holidays are!')
