@@ -3,3 +3,4 @@ graphs/.DS_Store
 .DS_Store
 .streamlit/secrets.toml
 .env
+*.pyc
