@@ -55,7 +55,6 @@ class Scraper:
 
         logger.info(f"Scraping for {day} failed.")
         return None
-        
 
     def _get_df_from_URL(self, day: date):
         html = self.driver.page_source

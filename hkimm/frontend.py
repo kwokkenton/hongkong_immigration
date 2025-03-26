@@ -5,8 +5,7 @@ import streamlit as st
 conn = st.connection("neon", type="sql")
 # Perform query.
 df = conn.query("SELECT * FROM passengers;", ttl="10m")
-# Print results.
-# st.markdown("[]
+
 st.write(
     """# Is Hong Kong facing Depopulation?
 
@@ -28,7 +27,7 @@ Bloomberg Opinion have looked at proxies such as the withdrawal of money from th
 )
 
 start_date = st.sidebar.date_input("start date", datetime.date(2020, 1, 24))
-end_date = st.sidebar.date_input("end date", datetime.date(2025, 1, 11))
+end_date = st.sidebar.date_input("end date", datetime.date.today())
 
 if start_date < end_date:
     st.success("Looking at the period between `%s` and `%s`." % (start_date, end_date))
@@ -59,8 +58,6 @@ st.write(
 """
 )
 df["flux"] = df.arrivals - df.departures
-# df_aggregate_numbers = df.groupby(['date']).sum()[['arrivals','departures','flux']]
-# st.line_chart(df_aggregate_numbers, y=['arrivals', 'departures'])
 
 for i in ["Hong Kong Residents", "Mainland Visitors", "Other Visitors"]:
     st.write("### " + i)

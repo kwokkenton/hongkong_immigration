@@ -10,6 +10,7 @@ from .utils import get_date_list
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+
 def _upload_single(scraper: Scraper, database: NeonDatabase, day: date):
     success = False
 
@@ -18,10 +19,11 @@ def _upload_single(scraper: Scraper, database: NeonDatabase, day: date):
         database.upload_df_to_neon(df)
         success = True
         return success
-    else: 
+    else:
         return success
-    
-def scrape_and_upload(start: date, end: date = None):
+
+
+def scrape_and_upload(start: date, connection_string: str, end: date = None):
     """Scrape and upload to database between specified dates.
 
     Leaving end date as null only scrapes a single day.
@@ -34,7 +36,7 @@ def scrape_and_upload(start: date, end: date = None):
         end = start
 
     scraper = Scraper()
-    database = NeonDatabase()
+    database = NeonDatabase(connection_string)
 
     date_list = get_date_list(start, end)
     for day in tqdm(date_list):

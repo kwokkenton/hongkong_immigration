@@ -1,16 +1,10 @@
-import os
-
 import pandas as pd
-from dotenv import load_dotenv
 from psycopg2 import pool
 
 
 class NeonDatabase:
-    def __init__(self):
-        # Load .env file
-        load_dotenv()
-        # Get the connection string from the environment variable
-        connection_string = os.getenv("DATABASE_URL")
+    def __init__(self, connection_string: str):
+
         # Create a connection pool
         self.connection_pool = pool.SimpleConnectionPool(
             1,  # Minimum number of connections in the pool
